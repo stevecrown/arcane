@@ -1,0 +1,19 @@
+services:
+  kapowarr:
+    container_name: kapowarr
+    image: mrcas/kapowarr:latest
+    restart: no
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /docker/kapowarr-db:/app/db
+      - ${DLDIR}/completed:/app/temp_downloads
+      - ${COMICDIR}:/comics
+    network_mode: bridge
+    ports:
+      - 5656:5656
+
+volumes:
+  kapowarr-db:
