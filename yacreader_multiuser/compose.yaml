@@ -1,0 +1,50 @@
+# https://github.com/jaapjan14/yacreader-multiuser/tree/main
+
+services:
+  yacreader-stefan:
+    image: jaap14/yacreader-multiuser:latest
+    container_name: yacreader-stefan
+    environment:
+      - YACREADER_USER=stefan
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${COMICDIR}:/comics
+      - /docker/yacreader_multiuser/config/stefan:/config
+    ports:
+      - "9081:8080"
+    network_mode: bridge
+    restart: unless-stopped
+
+  yacreader-jessi:
+    image: jaap14/yacreader-multiuser:latest
+    container_name: yacreader-jessi
+    environment:
+      - YACREADER_USER=jessi
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${COMICDIR}:/comics
+      - /docker/yacreader_multiuser/config/jessi:/config
+    ports:
+      - "9082:8080"
+    network_mode: bridge
+    restart: unless-stopped
+    
+  yacreader-tobi:
+    image: jaap14/yacreader-multiuser:latest
+    container_name: yacreader-tobi
+    environment:
+      - YACREADER_USER=tobi
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${COMICDIR}:/comics
+      - /docker/yacreader_multiuser/config/tobi:/config
+    ports:
+      - "9083:8080"
+    network_mode: bridge
+    restart: unless-stopped
