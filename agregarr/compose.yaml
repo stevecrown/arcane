@@ -1,0 +1,16 @@
+services:
+  agregarr:
+    image: agregarr/agregarr:latest
+    container_name: agregarr
+    restart: unless-stopped
+    volumes:
+      - /docker/agregarr/config:/app/config ### Change /path/to/config to your actual config path
+
+      # Develop branch only (optional): For Coming Soon feature, mount media matching Radarr/Sonarr paths
+      # Linux/Mac: - /mnt/media/movies:/raddarr/container/path
+      - ${TVDIR}:/serien
+      - ${MOVIEDIR}:/filme
+      - ${KOMETA}:/kometa
+    ports:
+      - 7171:7171
+    network_mode: bridge
