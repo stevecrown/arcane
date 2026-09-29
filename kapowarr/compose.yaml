@@ -8,7 +8,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - /docker/kapowarr-db:/app/db
+      - /docker/kapowarr/kapowarr-db:/app/db
       - ${DLDIR}/completed:/app/temp_downloads
       - ${COMICDIR}:/comics
     network_mode: bridge
