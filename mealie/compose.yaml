@@ -1,0 +1,21 @@
+services:
+  mealie:
+    image: ghcr.io/mealie-recipes/mealie:latest   # Empfehlung: konkrete Version, z.B. v3.19.0
+    container_name: mealie
+    restart: unless-stopped
+    environment:
+      - ALLOW_SIGNUP=${ALLOW_SIGNUP}
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    ports:
+      - "9925:9000"         # Host-Port:Container-Port → http://<server-ip>:9925
+    deploy:
+      resources:
+        limits:
+          memory: 1000M     # Verhindert übermäßige RAM-Nutzung durch Python
+    volumes:
+      - /docker/mealie-data:/app/data/
+ 
+volumes:
+  mealie-data:
