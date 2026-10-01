@@ -1,0 +1,47 @@
+services:
+  mediascraparr:
+#    image: ghcr.io/stevecrown/mediascraparr:latest
+    build:
+      context: https://${GITHUB_TOKEN}@github.com/stevecrown/MediaScraparr.git#main
+      dockerfile: Dockerfile
+    container_name: mediascraparr
+    restart: unless-stopped
+    ports:
+      - "8020:8020"
+    network_mode: "bridge"
+    volumes:
+      - ${MOVIEDIR}:/filme
+      - ${TVDIR}:/serien
+      - ${COMICDIR}:/comics
+      - ${FILMREIHEN}:/filmreihen
+      - ${BOOKDIR}:/books
+      - ${PLAYLISTS}:/playlists
+      - /docker/mediascraparr/data:/app/data
+#      - /docker/mediascraparr/app:/app/app
+#      - /docker/mediascraparr/templates:/app/templates
+#      - /docker/mediascraparr/static:/app/static
+    env_file:
+      - .env
+    environment:
+      MEDIA_ROOT: /filme
+      DATA_DIR: /app/data
+      # Container paths shown in Settings → Libraries volume picker:
+      LIBRARY_MOUNTS: /filme,/serien,/comics,/filmreihen
+      TMDB_API_KEY: ${TMDB_API_KEY:-}
+      FANART_API_KEY: ${FANART_API_KEY:-}
+      IMDB_API_KEY: ${IMDB_API_KEY:-}
+      OFDB_API_KEY: ${OFDB_API_KEY:-}
+      COMICVINE_API_KEY: ${COMICVINE_API_KEY:-}
+      PLEX_URL: ${PLEX_URL:-}
+      PLEX_TOKEN: ${PLEX_TOKEN:-}
+      RADARR_HOSTNAME: ${RADARR_HOSTNAME:-}
+      RADARR_PORT: ${RADARR_PORT:-}
+      RADARR_API_KEY: ${RADARR_API_KEY:-}
+      RADARR_USE_SSL: ${RADARR_USE_SSL:-}
+      RADARR_BASE_URL: ${RADARR_BASE_URL:-}
+      SONARR_HOSTNAME: ${SONARR_HOSTNAME:-}
+      SONARR_PORT: ${SONARR_PORT:-}
+      SONARR_API_KEY: ${SONARR_API_KEY:-}
+      SONARR_USE_SSL: ${SONARR_USE_SSL:-}
+      SONARR_BASE_URL: ${SONARR_BASE_URL:-}
+      PYTHONUNBUFFERED: 1
