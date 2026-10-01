@@ -1,0 +1,2 @@
+Benutze diese syntax um einen admin user initial aufzusetzen:
+docker run --rm -v /docker/manictimeserver/Data:/app/Data --entrypoint dotnet manictime/manictimeserver ManicTimeServer.dll addadmin -u stefan.kronast@kss-kronast.de -p y7Tx#%EgGJ@3LD7no73j

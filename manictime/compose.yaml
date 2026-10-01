@@ -1,0 +1,10 @@
+services:
+  manictimeserver:
+    image: manictime/manictimeserver:2026.2.3
+    container_name: manictime
+    restart: unless-stopped
+    volumes:
+    - /docker/manictimeserver/Data:/app/Data
+    network_mode: bridge
+    ports:
+    - 8080:8080
