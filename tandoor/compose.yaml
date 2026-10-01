@@ -1,0 +1,38 @@
+services:
+  db_recipes:
+    container_name: postgres_db
+    restart: always
+    image: postgres:16-alpine
+    volumes:
+      - /docker/postgres/postgresql:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web_recipes:
+    container_name: tandoor
+    restart: always
+    image: vabene1111/recipes
+    environment:
+      - TZ=${TZ}
+      - SECRET_KEY=${SECRET_KEY}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - DB_ENGINE=${DB_ENGINE}
+      - POSTGRES_HOST=db_recipes        # must match the service name
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - 80:80
+    volumes:
+      - /docker/tandoor/staticfiles:/opt/recipes/staticfiles
+      - /docker/tandoor/mediafiles:/opt/recipes/mediafiles
+    depends_on:
+      - db_recipes
