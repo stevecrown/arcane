@@ -1,0 +1,36 @@
+services:
+  floppy:
+    image: ghcr.io/dannyvfilms/floppy:latest
+    container_name: floppy
+    restart: unless-stopped
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      - TZ=${TZ}
+      - SECRET=${SECRET}
+      - REDIS_URL=redis://redis:6379
+      - REGISTRATION=True
+      - DEMO_ACCOUNT_ENABLED=False
+      - TMDB_API=${TMDB_API}
+    volumes:
+      - floppy_db:/floppy/db
+    ports:
+      - "8000:8000"
+
+  redis:
+    image: redis:8-alpine
+    container_name: floppy-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes", "--save", "", "--maxmemory", "256mb", "--maxmemory-policy", "volatile-lru"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    volumes:
+      - redis_data:/data
+
+volumes:
+  floppy_db:
+  redis_data:
