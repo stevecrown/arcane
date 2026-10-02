@@ -1,7 +1,7 @@
 services:
   kapowarr:
     container_name: kapowarr
-    image: mrcas/kapowarr:latest
+    image: mrcas/kapowarr:v1.3.2
     restart: no
     environment:
       - PUID=${PUID}
