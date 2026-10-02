@@ -1,6 +1,6 @@
 services:
   manictimeserver:
-    image: manictime/manictimeserver:2026.2.3
+    image: manictime/manictimeserver:2026.2.2
     container_name: manictime
     restart: unless-stopped
     volumes:
