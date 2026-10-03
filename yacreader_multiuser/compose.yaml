@@ -33,3 +33,19 @@ services:
       - "${PORT_JESSI}:8080"
     network_mode: bridge
     restart: unless-stopped
+
+  yacreader-tobi:
+    image: jaap14/yacreader-multiuser:latest
+    container_name: yacreader-tobi
+    environment:
+      - YACREADER_USER=tobi
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${COMICDIR}:/comics
+      - ${CONFIG_BASE}/tobi:/config
+    ports:
+      - "${PORT_TOBI}:8080"
+    network_mode: bridge
+    restart: unless-stopped
