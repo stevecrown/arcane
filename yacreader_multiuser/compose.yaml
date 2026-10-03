@@ -1,7 +1,7 @@
 # Ein offizieller YACReaderLibraryServer pro Benutzer (getrennte Bibliotheks-DB + Lesefortschritt).
 # Comics werden read-only geteilt; die DB liegt pro Benutzer lokal und wird ueber /comics/.yacreaderlibrary gemountet.
 # Kinder (jessi/tobi): Bibliothek = altersgefilterte Symlink-Ansicht ${DATA_BASE}/<user>/view (Skript ${DATA_BASE}/agefilter/build-views.py,
-# naechtlich 03:00 per systemd-Timer yacreader-agefilter), Symlinks zeigen auf /comics/...
+# taeglich 09:00 per systemd-Timer yacreader-agefilter), Symlinks zeigen auf /comics/...
 # Umgestellt am 03.10.2026 (vorher jaap14/yacreader-multiuser mit gemeinsamer DB; Backup: /docker/yacreader-backup-20261003)
 
 services:
