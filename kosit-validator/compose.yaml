@@ -33,11 +33,13 @@ services:
       start_period: 30s
       retries: 3
     networks:
+      default:
       n8n:
         aliases:
           - kosit-validator
 
 networks:
+  default:
   n8n:
     name: ${N8N_NETWORK}
     external: true
