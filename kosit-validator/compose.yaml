@@ -1,13 +1,43 @@
-# Beispiel: KoSIT-Validator im selben Docker-Netz wie n8n betreiben.
-# Im n8n-Node "Konfiguration" dann kositUrl = http://kosit-validator:8081/
+# KoSIT-Validator (XRechnung) im selben Docker-Netz wie n8n.
+# n8n: POST http://kosit-validator:8081/  (Content-Type: application/xml)
+# Health: GET http://kosit-validator:8081/server/health
 services:
   kosit-validator:
-    image: ghcr.io/itplr-kosit/validator.git:latest
-#    build: .
+    image: ${KOSIT_IMAGE}
     container_name: kosit-validator
     restart: unless-stopped
-    expose:
+    command:
+      - java
+      - -Xms${JAVA_XMS}
+      - -Xmx${JAVA_XMX}
+      - -XX:+UseG1GC
+      - -XX:+UseStringDeduplication
+      - -XX:+ExitOnOutOfMemoryError
+      - -jar
+      - validator.jar
+      - -s
+      - scenarios.xml
+      - -D
+      - -H
+      - 0.0.0.0
+      - -P
       - "8081"
+      - --disable-gui
+    ports:
+      - ${KOSIT_HOST_PORT}:8081
+    mem_limit: ${KOSIT_MEM_LIMIT}
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8081/server/health >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 5s
+      start_period: 30s
+      retries: 3
+    networks:
+      n8n:
+        aliases:
+          - kosit-validator
 
-networks: 
-  n8n-default:
+networks:
+  n8n:
+    name: ${N8N_NETWORK}
+    external: true
