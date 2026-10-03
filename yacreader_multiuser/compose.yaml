@@ -1,4 +1,5 @@
 # https://github.com/jaapjan14/yacreader-multiuser/tree/main
+# Image: nur Tag "latest" verfuegbar (kein Versions-Tag) - daher nicht gepinnt
 
 services:
   yacreader-stefan:
@@ -11,9 +12,9 @@ services:
       - TZ=${TZ}
     volumes:
       - ${COMICDIR}:/comics
-      - /docker/yacreader_multiuser/config/stefan:/config
+      - ${CONFIG_BASE}/stefan:/config
     ports:
-      - "9081:8080"
+      - "${PORT_STEFAN}:8080"
     network_mode: bridge
     restart: unless-stopped
 
@@ -27,24 +28,8 @@ services:
       - TZ=${TZ}
     volumes:
       - ${COMICDIR}:/comics
-      - /docker/yacreader_multiuser/config/jessi:/config
+      - ${CONFIG_BASE}/jessi:/config
     ports:
-      - "9082:8080"
-    network_mode: bridge
-    restart: unless-stopped
-    
-  yacreader-tobi:
-    image: jaap14/yacreader-multiuser:latest
-    container_name: yacreader-tobi
-    environment:
-      - YACREADER_USER=tobi
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-    volumes:
-      - ${COMICDIR}:/comics
-      - /docker/yacreader_multiuser/config/tobi:/config
-    ports:
-      - "9083:8080"
+      - "${PORT_JESSI}:8080"
     network_mode: bridge
     restart: unless-stopped
