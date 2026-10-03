@@ -1,51 +1,53 @@
-# https://github.com/jaapjan14/yacreader-multiuser/tree/main
-# Image: nur Tag "latest" verfuegbar (kein Versions-Tag) - daher nicht gepinnt
+# Ein offizieller YACReaderLibraryServer pro Benutzer (getrennte Bibliotheks-DB + Lesefortschritt).
+# Comics werden read-only geteilt; die DB liegt pro Benutzer lokal und wird ueber /comics/.yacreaderlibrary gemountet.
+# Umgestellt am 03.10.2026 (vorher jaap14/yacreader-multiuser mit gemeinsamer DB; Backup: /docker/yacreader-backup-20261003)
 
 services:
   yacreader-stefan:
-    image: jaap14/yacreader-multiuser:latest
+    image: yacreader/yacreaderlibraryserver:10.3.2
     container_name: yacreader-stefan
     environment:
-      - YACREADER_USER=stefan
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${COMICDIR}:/comics
-      - ${CONFIG_BASE}/stefan:/config
+      - ${COMICDIR}:/comics:ro
+      - ${DATA_BASE}/stefan/library:/comics/.yacreaderlibrary
+      - ${DATA_BASE}/stefan/config:/config
     ports:
       - "${PORT_STEFAN}:8080"
     network_mode: bridge
     restart: unless-stopped
 
   yacreader-jessi:
-    image: jaap14/yacreader-multiuser:latest
+    image: yacreader/yacreaderlibraryserver:10.3.2
     container_name: yacreader-jessi
     environment:
-      - YACREADER_USER=jessi
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${COMICDIR}:/comics
-      - ${CONFIG_BASE}/jessi:/config
+      - ${COMICDIR}:/comics:ro
+      - ${DATA_BASE}/jessi/library:/comics/.yacreaderlibrary
+      - ${DATA_BASE}/jessi/config:/config
     ports:
       - "${PORT_JESSI}:8080"
     network_mode: bridge
     restart: unless-stopped
 
   yacreader-tobi:
-    image: jaap14/yacreader-multiuser:latest
+    image: yacreader/yacreaderlibraryserver:10.3.2
     container_name: yacreader-tobi
     environment:
-      - YACREADER_USER=tobi
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${COMICDIR}:/comics
-      - ${CONFIG_BASE}/tobi:/config
+      - ${COMICDIR}:/comics:ro
+      - ${DATA_BASE}/tobi/library:/comics/.yacreaderlibrary
+      - ${DATA_BASE}/tobi/config:/config
     ports:
       - "${PORT_TOBI}:8080"
     network_mode: bridge
     restart: unless-stopped
+
