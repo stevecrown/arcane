@@ -30,7 +30,8 @@ services:
       - TZ=${TZ}
     volumes:
       - ${COMICDIR}:/comics:ro
-      - ${DATA_BASE}/jessi/library:/comics/.yacreaderlibrary
+      - ${DATA_BASE}/jessi/view:/library:ro
+      - ${DATA_BASE}/jessi/library:/library/.yacreaderlibrary
       - ${DATA_BASE}/jessi/config:/config
     ports:
       - "${PORT_JESSI}:8080"
