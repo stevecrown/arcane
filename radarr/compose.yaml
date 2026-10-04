@@ -1,0 +1,17 @@
+# Migriert am 03.10.2026 aus Komodo-Stack "radarr" (Compose-Projekt "arr-stack")
+services:
+  radarr:
+    image: lscr.io/linuxserver/radarr:6.4.4.10685-ls318
+    container_name: radarr
+    restart: unless-stopped
+    network_mode: bridge
+    ports:
+      - "${RADARR_PORT}:7878"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+    volumes:
+      - ${RADARR_CONFIG}:/config
+      - ${DLDIR}/completed:/downloads/completed/Movies
+      - ${MOVIEDIR}:/filme
+      - /etc/localtime:/etc/localtime:ro
