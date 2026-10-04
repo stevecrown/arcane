@@ -1,0 +1,24 @@
+# Migriert am 03.10.2026 aus Komodo-Stack "prowlarr" (Compose-Projekt "arr-stack"); ersetzt den alten nginx-Platzhalter
+services:
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:develop-2.6.5.5623-ls275
+    container_name: prowlarr
+    restart: unless-stopped
+    network_mode: bridge
+    ports:
+      - "${PROWLARR_PORT}:9696"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${PROWLARR_CONFIG}:/config
+    labels:
+      - homepage.group=media-stack
+      - homepage.name=prowlarr
+      - homepage.icon=prowlarr.png
+      - homepage.href=http://192.168.178.78:9696/
+      - homepage.description=indexer
+      - homepage.widget.type=prowlarr
+      - homepage.widget.url=http://192.168.178.78:9696/
+      - homepage.widget.key=${PROWLARR_HOMEPAGE_KEY}
