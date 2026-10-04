@@ -1,0 +1,49 @@
+# Zentraler Reverse Proxy (nur intern, KEINE Portweiterleitung im Router).
+# Routen: Traefik file provider in ${DATA_DIR}/dynamic (home.yml = home.kronast-family.de, kss.yml = int.kss-kronast.de)
+# Zertifikate: Let's Encrypt Wildcard per DNS-01 ueber deSEC; home.kronast-family.de ist per NS an deSEC delegiert (ns1.desec.io/ns2.desec.org).
+# KSS-Zone int.kss-kronast.de ZURUECKGESTELLT (deSEC-Domainlimit 1): spaeter tls.domains[1] = ${ZONE_KSS} + *.${ZONE_KSS} wieder ergaenzen.
+# Kein erzwungener HTTP->HTTPS-Redirect (YACReader-App spricht nur HTTP).
+services:
+  traefik:
+    image: traefik:${VERSION_TRAEFIK}
+    container_name: traefik
+    restart: unless-stopped
+    network_mode: bridge
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - TZ=${TZ}
+      - DESEC_TOKEN=${DESEC_TOKEN}
+      - DESEC_TTL=3600
+      - DESEC_PROPAGATION_TIMEOUT=600
+    volumes:
+      - ${DATA_DIR}/dynamic:/etc/traefik/dynamic:ro
+      - ${DATA_DIR}/acme:/acme
+    command:
+      - --global.checknewversion=false
+      - --global.sendanonymoususage=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.websecure.http.tls.certresolver=le
+      - --entrypoints.websecure.http.tls.domains[0].main=${ZONE_HOME}
+      - --entrypoints.websecure.http.tls.domains[0].sans=*.${ZONE_HOME}
+      - --certificatesresolvers.le.acme.email=${ACME_EMAIL}
+      - --certificatesresolvers.le.acme.caserver=${ACME_CASERVER}
+      - --certificatesresolvers.le.acme.storage=/acme/acme.json
+      - --certificatesresolvers.le.acme.dnschallenge.provider=desec
+      - --certificatesresolvers.le.acme.dnschallenge.resolvers=1.1.1.1:53,9.9.9.9:53
+      # Das LAN (UniFi) faengt ausgehendes DNS ab und cached TXT-Records -> eigene Propagation-Pruefung sieht alte Werte.
+      # Daher: keine lokale Pruefung, stattdessen feste Wartezeit (deSEC verteilt in < 1 min); LE prueft selbst.
+      - --certificatesresolvers.le.acme.dnschallenge.propagation.disablechecks=true
+      - --certificatesresolvers.le.acme.dnschallenge.propagation.delaybeforechecks=120s
+      - --providers.file.directory=/etc/traefik/dynamic
+      - --providers.file.watch=true
+      - --api.dashboard=true
+      - --ping=true
+      - --log.level=INFO
+    healthcheck:
+      test: ["CMD", "traefik", "healthcheck", "--ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
