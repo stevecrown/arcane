@@ -1,0 +1,17 @@
+# Migriert am 03.10.2026 aus Komodo-Stack "lidarr" (Compose-Projekt "arr-stack")
+services:
+  lidarr:
+    image: lscr.io/linuxserver/lidarr:3.1.0.4875-ls42
+    container_name: lidarr
+    restart: unless-stopped
+    network_mode: bridge
+    ports:
+      - "${LIDARR_PORT}:8686"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+    volumes:
+      - ${LIDARR_CONFIG}:/config
+      - ${DLDIR}/completed:/downloads/completed
+      - ${MUSICDIR}:/musik
+      - /etc/localtime:/etc/localtime:ro
