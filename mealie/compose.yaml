@@ -5,6 +5,7 @@ services:
     restart: unless-stopped
     environment:
       - ALLOW_SIGNUP=${ALLOW_SIGNUP}
+      - BASE_URL=${BASE_URL}
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
