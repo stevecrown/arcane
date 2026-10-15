@@ -1,6 +1,6 @@
 services:
   mealie:
-    image: ${VERSION_MEALIE}   # Empfehlung: konkrete Version, z.B. v3.19.0
+    image: ghcr.io/mealie-recipes/mealie:${VERSION_MEALIE}
     container_name: mealie
     restart: unless-stopped
     environment:
