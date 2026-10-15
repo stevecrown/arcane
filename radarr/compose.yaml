@@ -1,7 +1,7 @@
 # Migriert am 03.10.2026 aus Komodo-Stack "radarr" (Compose-Projekt "arr-stack")
 services:
   radarr:
-    image: lscr.io/linuxserver/radarr:6.4.4.10685-ls318
+    image: lscr.io/linuxserver/radarr:6.4.4.10685-ls321
     container_name: radarr
     restart: unless-stopped
     network_mode: bridge
