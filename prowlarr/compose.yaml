@@ -1,7 +1,7 @@
 # Migriert am 03.10.2026 aus Komodo-Stack "prowlarr" (Compose-Projekt "arr-stack"); ersetzt den alten nginx-Platzhalter
 services:
   prowlarr:
-    image: lscr.io/linuxserver/prowlarr:develop-2.6.5.5623-ls275
+    image: lscr.io/linuxserver/prowlarr:develop-2.6.5.5623-ls276
     container_name: prowlarr
     restart: unless-stopped
     network_mode: bridge
