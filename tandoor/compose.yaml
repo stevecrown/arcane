@@ -2,7 +2,7 @@ services:
   db_recipes:
     container_name: postgres_db
     restart: always
-    image: ${VERSION_POSTGRES}
+    image: postgres:${VERSION_POSTGRES}
     volumes:
       - /docker/postgres/postgresql:/var/lib/postgresql/data
     environment:
@@ -18,7 +18,7 @@ services:
   web_recipes:
     container_name: tandoor
     restart: always
-    image: ${VERSION_TANDOOR}
+    image: vabene1111/recipes:${VERSION_TANDOOR}
     environment:
       - TZ=${TZ}
       - SECRET_KEY=${SECRET_KEY}
